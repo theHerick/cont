@@ -1,0 +1,879 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Contatos Recebidos</title>
+    <style>
+* { margin: 0; padding: 0; box-sizing: border-box; touch-action: manipulation; }
+.login-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: var(--background);
+}
+.login-box {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+.login-box .header-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+.login-box .header-logo img {
+  width: 50px;
+  height: auto;
+}
+.login-box h1 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  color: var(--foreground);
+}
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.login-form input {
+  width: 100%;
+  padding: 0.75rem;
+  background: var(--input-background);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--foreground);
+  font-size: 0.875rem;
+}
+.login-error {
+  color: #dc2626;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+}
+.hidden { display: none; }
+:root {
+  --background: #000000;
+  --foreground: #ffffff;
+  --card: #0a0a0a;
+  --border: rgba(255, 255, 255, 0.1);
+  --input-background: #1a1a1a;
+  --muted-foreground: #a3a3a3;
+  --secondary: #1a1a1a;
+  --accent: #2a2a2a;
+  --radius: 0.5rem;
+}
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.5;
+  min-height: 100vh;
+  padding: 1rem;
+}
+.container { max-width: 600px; margin: 0 auto; }
+.top-header {
+  background: #000000;
+  border-bottom: 1px solid var(--border);
+  padding: 0.75rem 1rem;
+  margin-bottom: 2rem;
+}
+.top-header-content {
+  max-width: 600px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.top-header img {
+  width: 35px;
+  height: auto;
+}
+.top-header h1 { 
+  font-size: 1rem; 
+  font-weight: 600; 
+  margin: 0;
+}
+.header {
+  text-align: center;
+  padding: 1.5rem 0;
+  margin-bottom: 2rem;
+}
+.header h1 { 
+  font-size: 1.5rem; 
+  font-weight: 600; 
+  margin-bottom: 0.25rem; 
+}
+.header p { 
+  color: var(--muted-foreground); 
+  font-size: 0.875rem; 
+}
+.form-section {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+.form-section h2 { font-size: 1.25rem; margin-bottom: 1rem; }
+.form-group { margin-bottom: 1rem; }
+.form-group label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+.form-group input, .form-group textarea {
+  width: 100%;
+  padding: 0.75rem;
+  background: var(--input-background);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--foreground);
+  font-size: 0.875rem;
+}
+.form-group textarea { min-height: 100px; resize: vertical; font-family: inherit; }
+.btn-primary {
+  width: 100%;
+  padding: 0.75rem 1.5rem;
+  background: var(--foreground);
+  color: var(--background);
+  border: none;
+  border-radius: var(--radius);
+  font-weight: 500;
+  cursor: pointer;
+  font-size: 0.875rem;
+}
+.btn-primary:hover { opacity: 0.9; }
+.cards-section h2 { font-size: 1.25rem; margin-bottom: 1rem; }
+.cards-container { display: flex; flex-direction: column; gap: 1rem; }
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+}
+.card-header {
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+.card-header h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.25rem; }
+.card-date { font-size: 0.75rem; color: var(--muted-foreground); }
+.card-info { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 0.75rem; }
+.info-item { font-size: 0.875rem; }
+.info-label { color: var(--muted-foreground); font-weight: 500; }
+.card-message {
+  margin-top: 0.75rem;
+  padding: 0.75rem;
+  background: var(--secondary);
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+}
+.card-actions { display: flex; gap: 0.5rem; margin-top: 1rem; }
+.tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--border);
+}
+.tab {
+  padding: 0.75rem 1.5rem;
+  background: transparent;
+  color: var(--muted-foreground);
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+.tab:hover {
+  color: var(--foreground);
+}
+.tab.active {
+  color: var(--foreground);
+  border-bottom-color: var(--foreground);
+}
+.tab-content {
+  display: none;
+}
+.tab-content.active {
+  display: block;
+}
+.btn-whatsapp, .btn-email, .btn-delete, .btn-save {
+  flex: 1;
+  padding: 0.625rem 1rem;
+  border: none;
+  border-radius: var(--radius);
+  font-weight: 500;
+  cursor: pointer;
+  font-size: 0.813rem;
+}
+.btn-whatsapp { background: #25D366; color: #ffffff; }
+.btn-email { background: var(--accent); color: var(--foreground); border: 1px solid var(--border); }
+.btn-delete { background: #dc2626; color: #ffffff; }
+.btn-save { background: #3b82f6; color: #ffffff; }
+.logout-container {
+  text-align: center;
+  padding: 2rem 0;
+  margin-top: 2rem;
+  border-top: 1px solid var(--border);
+}
+.btn-logout {
+  padding: 0.75rem 2rem;
+  background: var(--secondary);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-weight: 500;
+  cursor: pointer;
+  font-size: 0.875rem;
+}
+.btn-logout:hover {
+  background: var(--accent);
+}
+/* Modal/Popup personalizado */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+}
+.modal-overlay.active {
+  display: flex;
+}
+.modal-box {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+}
+.modal-title {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  color: var(--foreground);
+}
+.modal-message {
+  color: var(--muted-foreground);
+  margin-bottom: 1.5rem;
+  font-size: 0.875rem;
+}
+.modal-buttons {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+.modal-btn {
+  padding: 0.625rem 1.5rem;
+  border: none;
+  border-radius: var(--radius);
+  font-weight: 500;
+  cursor: pointer;
+  font-size: 0.875rem;
+}
+.modal-btn-primary {
+  background: var(--foreground);
+  color: var(--background);
+}
+.modal-btn-secondary {
+  background: var(--secondary);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+}
+.modal-btn-success {
+  background: #3b82f6;
+  color: #ffffff;
+}
+.modal-btn-danger {
+  background: #dc2626;
+  color: #ffffff;
+}
+/* Sistema de Notificações */
+.notification-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 400px;
+}
+.notification {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-left: 4px solid #3b82f6;
+  border-radius: var(--radius);
+  padding: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  animation: slideIn 0.3s ease-out;
+  cursor: pointer;
+}
+.notification.success {
+  border-left-color: #10b981;
+}
+.notification.error {
+  border-left-color: #dc2626;
+}
+.notification.info {
+  border-left-color: #3b82f6;
+}
+@keyframes slideIn {
+  from {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+.notification-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+.notification-title {
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--foreground);
+}
+.notification-close {
+  background: none;
+  border: none;
+  color: var(--muted-foreground);
+  cursor: pointer;
+  font-size: 1.25rem;
+  line-height: 1;
+  padding: 0;
+}
+.notification-body {
+  font-size: 0.813rem;
+  color: var(--muted-foreground);
+}
+.notification-badge {
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  background: #dc2626;
+  color: white;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: bold;
+  z-index: 1999;
+  animation: pulse 2s infinite;
+}
+.notification-badge.active {
+  display: flex;
+}
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+    </style>
+</head>
+<body>
+    <div id="loginScreen" class="login-container">
+        <div class="login-box">
+            <h1 style="margin-bottom: 0.25rem;">Motorista Particular BC</h1>
+            <p style="color: var(--muted-foreground); font-size: 0.875rem; margin: 0.25rem 0 1.5rem 0;">Sistema do Motorista</p>
+            <h2 style="margin: 0 0 1rem 0; font-size: 1.2rem;">Login</h2>
+            <form class="login-form" onsubmit="handleLogin(event)">
+                <input type="text" id="username" placeholder="Usuário" required>
+                <input type="password" id="password" placeholder="Senha" required>
+                <button type="submit" class="btn-primary">Entrar</button>
+                <div id="loginError" class="login-error hidden"></div>
+            </form>
+        </div>
+    </div>
+
+    <div id="mainApp" class="hidden">
+        <div class="top-header">
+            <div class="top-header-content">
+                <img src="img.jpg" alt="Logo">
+                <h1>Motorista Particular BC</h1>
+            </div>
+        </div>
+        
+        <div class="container">
+            <header class="header">
+                <h1>Contatos Recebidos</h1>
+                <p>Gerencie seus contatos e responda rapidamente</p>
+            </header>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('novos')">Novos Clientes (<span id="countNovos">3</span>)</button>
+            <button class="tab" onclick="switchTab('salvos')">Contatos Salvos (<span id="countSalvos">0</span>)</button>
+        </div>
+
+        <div id="tabNovos" class="tab-content active">
+            <section class="cards-section">
+                <div class="cards-container" id="cardsNovos"></div>
+            </section>
+        </div>
+
+        <div id="tabSalvos" class="tab-content">
+            <section class="cards-section">
+                <div class="cards-container" id="cardsSalvos"></div>
+            </section>
+        </div>
+        
+            <div class="logout-container">
+                <button class="btn-logout" onclick="handleLogout()">Sair</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal personalizado -->
+    <div id="modalOverlay" class="modal-overlay" onclick="closeModal(event)">
+        <div class="modal-box" onclick="event.stopPropagation()">
+            <h3 class="modal-title" id="modalTitle"></h3>
+            <p class="modal-message" id="modalMessage"></p>
+            <div class="modal-buttons" id="modalButtons"></div>
+        </div>
+    </div>
+    
+    <!-- Container de Notificações -->
+    <div id="notificationContainer" class="notification-container"></div>
+    <div id="notificationBadge" class="notification-badge"></div>
+    
+    <script>
+const API_URL = 'http://localhost:3000/api';
+let currentUser = null;
+let novosClientes = [];
+let contatosSalvos = [];
+let lastContactCount = 0;
+let notificationCheckInterval = null;
+
+// Sistema de Notificações
+function showNotification(title, message, type = 'info') {
+    const container = document.getElementById('notificationContainer');
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    
+    notification.innerHTML = `
+        <div class="notification-header">
+            <span class="notification-title">${title}</span>
+            <button class="notification-close" onclick="this.parentElement.parentElement.remove()">×</button>
+        </div>
+        <div class="notification-body">${message}</div>
+    `;
+    
+    // Adicionar som de notificação (opcional)
+    playNotificationSound();
+    
+    container.appendChild(notification);
+    
+    // Remover após 5 segundos
+    setTimeout(() => {
+        notification.remove();
+    }, 5000);
+    
+    // Clicar na notificação remove ela
+    notification.onclick = () => notification.remove();
+}
+
+function playNotificationSound() {
+    // Cria um beep simples usando Web Audio API
+    try {
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        oscillator.frequency.value = 800;
+        oscillator.type = 'sine';
+        
+        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+        
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.5);
+    } catch (e) {
+        console.log('Áudio não disponível');
+    }
+}
+
+function updateNotificationBadge(count) {
+    const badge = document.getElementById('notificationBadge');
+    if (count > 0) {
+        badge.textContent = count;
+        badge.classList.add('active');
+    } else {
+        badge.classList.remove('active');
+    }
+}
+
+// Verificar novos contatos periodicamente
+async function checkNewContacts() {
+    if (!currentUser) return;
+    
+    try {
+        const response = await fetch(`${API_URL}/contatos/novos`);
+        const contacts = await response.json();
+        
+        // Verificar se há novos contatos
+        if (contacts.length > lastContactCount && lastContactCount > 0) {
+            const newContactsCount = contacts.length - lastContactCount;
+            const lastContact = contacts[0]; // O mais recente
+            
+            showNotification(
+                '🔔 Novo Contato Recebido!',
+                `${lastContact.nome} acabou de entrar em contato. Email: ${lastContact.email}`,
+                'success'
+            );
+            
+            updateNotificationBadge(newContactsCount);
+        }
+        
+        lastContactCount = contacts.length;
+        
+        // Atualizar a lista se mudou
+        if (JSON.stringify(novosClientes) !== JSON.stringify(contacts)) {
+            novosClientes = contacts;
+            renderNovosClientes();
+        }
+        
+    } catch (error) {
+        console.error('Erro ao verificar novos contatos:', error);
+    }
+}
+
+// Iniciar verificação automática
+function startNotificationSystem() {
+    // Verificar a cada 10 segundos
+    notificationCheckInterval = setInterval(checkNewContacts, 10000);
+    
+    // Solicitar permissão para notificações do navegador
+    if ('Notification' in window && Notification.permission === 'default') {
+        Notification.requestPermission();
+    }
+}
+
+// Parar verificação automática
+function stopNotificationSystem() {
+    if (notificationCheckInterval) {
+        clearInterval(notificationCheckInterval);
+        notificationCheckInterval = null;
+    }
+}
+
+// Sistema de Modal personalizado
+function showModal(title, message, buttons = []) {
+    const modal = document.getElementById('modalOverlay');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalMessage = document.getElementById('modalMessage');
+    const modalButtons = document.getElementById('modalButtons');
+    
+    modalTitle.textContent = title;
+    modalMessage.textContent = message;
+    modalButtons.innerHTML = '';
+    
+    if (buttons.length === 0) {
+        buttons = [{
+            text: 'OK',
+            class: 'modal-btn-primary',
+            action: () => closeModal()
+        }];
+    }
+    
+    buttons.forEach(btn => {
+        const button = document.createElement('button');
+        button.className = `modal-btn ${btn.class}`;
+        button.textContent = btn.text;
+        button.onclick = btn.action;
+        modalButtons.appendChild(button);
+    });
+    
+    modal.classList.add('active');
+}
+
+function closeModal(event) {
+    if (event && event.target !== document.getElementById('modalOverlay')) return;
+    document.getElementById('modalOverlay').classList.remove('active');
+}
+
+function showConfirm(title, message, onConfirm) {
+    showModal(title, message, [
+        {
+            text: 'Cancelar',
+            class: 'modal-btn-secondary',
+            action: () => closeModal()
+        },
+        {
+            text: 'Confirmar',
+            class: 'modal-btn-danger',
+            action: () => {
+                closeModal();
+                onConfirm();
+            }
+        }
+    ]);
+}
+
+function showSuccess(message) {
+    showModal('Sucesso!', message, [{
+        text: 'OK',
+        class: 'modal-btn-success',
+        action: () => closeModal()
+    }]);
+}
+
+function showError(message) {
+    showModal('Erro', message, [{
+        text: 'OK',
+        class: 'modal-btn-danger',
+        action: () => closeModal()
+    }]);
+}
+
+// Verificar se já está logado ao carregar a página
+window.addEventListener('DOMContentLoaded', () => {
+    const savedUser = localStorage.getItem('currentUser');
+    if (savedUser) {
+        currentUser = JSON.parse(savedUser);
+        document.getElementById('loginScreen').classList.add('hidden');
+        document.getElementById('mainApp').classList.remove('hidden');
+        loadNovosClientes();
+        loadContatosSalvos();
+        startNotificationSystem(); // Iniciar sistema de notificações
+    }
+});
+
+// Login com API
+async function handleLogin(event) {
+    event.preventDefault();
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    const errorDiv = document.getElementById('loginError');
+    
+    try {
+        const response = await fetch(`${API_URL}/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            currentUser = data.user;
+            
+            // Salvar no localStorage para auto-login
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('mainApp').classList.remove('hidden');
+            errorDiv.classList.add('hidden');
+            
+            // Carregar dados
+            await loadNovosClientes();
+            await loadContatosSalvos();
+            startNotificationSystem(); // Iniciar sistema de notificações
+        } else {
+            errorDiv.textContent = data.message || 'Usuário ou senha incorretos';
+            errorDiv.classList.remove('hidden');
+        }
+    } catch (error) {
+        console.error('Erro no login:', error);
+        errorDiv.textContent = 'Erro ao conectar com o servidor';
+        errorDiv.classList.remove('hidden');
+    }
+}
+
+// Logout
+function handleLogout() {
+    showConfirm('Sair do Sistema', 'Deseja realmente sair?', () => {
+        stopNotificationSystem(); // Parar sistema de notificações
+        localStorage.removeItem('currentUser');
+        currentUser = null;
+        lastContactCount = 0;
+        document.getElementById('mainApp').classList.add('hidden');
+        document.getElementById('loginScreen').classList.remove('hidden');
+        document.getElementById('username').value = '';
+        document.getElementById('password').value = '';
+    });
+}
+
+// Carregar contatos novos do banco
+async function loadNovosClientes() {
+    try {
+        const response = await fetch(`${API_URL}/contatos/novos`);
+        novosClientes = await response.json();
+        lastContactCount = novosClientes.length;
+        renderNovosClientes();
+        updateNotificationBadge(0); // Limpar badge ao visualizar
+    } catch (error) {
+        console.error('Erro ao carregar contatos novos:', error);
+    }
+}
+
+// Carregar contatos salvos do banco
+async function loadContatosSalvos() {
+    try {
+        const response = await fetch(`${API_URL}/contatos/salvos`);
+        contatosSalvos = await response.json();
+        renderContatosSalvos();
+    } catch (error) {
+        console.error('Erro ao carregar contatos salvos:', error);
+    }
+}
+
+function switchTab(tab) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    
+    if (tab === 'novos') {
+        document.querySelector('.tab:nth-child(1)').classList.add('active');
+        document.getElementById('tabNovos').classList.add('active');
+    } else {
+        document.querySelector('.tab:nth-child(2)').classList.add('active');
+        document.getElementById('tabSalvos').classList.add('active');
+    }
+}
+
+function renderNovosClientes() {
+    const container = document.getElementById("cardsNovos");
+    container.innerHTML = "";
+    
+    if (novosClientes.length === 0) {
+        container.innerHTML = '<div style="text-align: center; padding: 2rem; color: var(--muted-foreground);">Nenhum novo cliente</div>';
+    } else {
+        novosClientes.forEach((contact) => {
+            const card = document.createElement("div");
+            card.className = "card";
+            card.innerHTML = `<div class="card-header"><h3>${contact.nome}</h3><span class="card-date">${contact.data}</span></div><div class="card-body"><div class="card-info"><div class="info-item"><span class="info-label">Email: </span><span class="info-value">${contact.email}</span></div><div class="info-item"><span class="info-label">Telefone: </span><span class="info-value">${contact.telefone}</span></div></div>${contact.mensagem ? `<div class="card-message"><strong>Mensagem:</strong><p>${contact.mensagem}</p></div>` : ""}</div><div class="card-actions"><button class="btn-whatsapp" onclick="sendWhatsApp(${contact.id}, '${contact.nome}', '${contact.telefone}')">WhatsApp</button><button class="btn-email" onclick="sendEmail(${contact.id}, '${contact.nome}', '${contact.email}')">Email</button><button class="btn-save" onclick="saveContact(${contact.id})">Salvar Contato</button><button class="btn-delete" onclick="deleteNovoCliente(${contact.id})">Deletar</button></div>`;
+            container.appendChild(card);
+        });
+    }
+    document.getElementById("countNovos").textContent = novosClientes.length;
+}
+
+function renderContatosSalvos() {
+    const container = document.getElementById("cardsSalvos");
+    container.innerHTML = "";
+    
+    if (contatosSalvos.length === 0) {
+        container.innerHTML = '<div style="text-align: center; padding: 2rem; color: var(--muted-foreground);">Nenhum contato salvo</div>';
+    } else {
+        contatosSalvos.forEach((contact) => {
+            const card = document.createElement("div");
+            card.className = "card";
+            card.innerHTML = `<div class="card-header"><h3>${contact.nome}</h3><span class="card-date">${contact.data}</span></div><div class="card-body"><div class="card-info"><div class="info-item"><span class="info-label">Email: </span><span class="info-value">${contact.email}</span></div><div class="info-item"><span class="info-label">Telefone: </span><span class="info-value">${contact.telefone}</span></div></div>${contact.mensagem ? `<div class="card-message"><strong>Mensagem:</strong><p>${contact.mensagem}</p></div>` : ""}</div><div class="card-actions"><button class="btn-whatsapp" onclick="sendWhatsApp(${contact.id}, '${contact.nome}', '${contact.telefone}', 'salvo')">WhatsApp</button><button class="btn-email" onclick="sendEmail(${contact.id}, '${contact.nome}', '${contact.email}', 'salvo')">Email</button><button class="btn-delete" onclick="deleteContatoSalvo(${contact.id})">Deletar</button></div>`;
+            container.appendChild(card);
+        });
+    }
+    document.getElementById("countSalvos").textContent = contatosSalvos.length;
+}
+async function sendWhatsApp(id, nome, telefone, tipo = 'novo') {
+    const tel = telefone.replace(/\D/g, "");
+    const msg = encodeURIComponent(`Olá ${nome}, recebi seu contato através do formulário!`);
+    window.open(`https://wa.me/55${tel}?text=${msg}`, "_blank");
+    
+    // Registrar interação
+    await fetch(`${API_URL}/interacao`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            contato_id: id,
+            tipo_contato: tipo,
+            tipo_interacao: 'whatsapp',
+            usuario_id: currentUser?.id
+        })
+    });
+}
+
+async function sendEmail(id, nome, email, tipo = 'novo') {
+    const assunto = encodeURIComponent("Resposta ao seu contato");
+    const corpo = encodeURIComponent(`Olá ${nome},\n\nRecebi sua mensagem através do formulário.\n\nAtenciosamente`);
+    window.location.href = `mailto:${email}?subject=${assunto}&body=${corpo}`;
+    
+    // Registrar interação
+    await fetch(`${API_URL}/interacao`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            contato_id: id,
+            tipo_contato: tipo,
+            tipo_interacao: 'email',
+            usuario_id: currentUser?.id
+        })
+    });
+}
+
+async function saveContact(id) {
+    try {
+        const response = await fetch(`${API_URL}/contatos/salvar/${id}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ usuario_id: currentUser?.id })
+        });
+        
+        if (response.ok) {
+            await loadNovosClientes();
+            await loadContatosSalvos();
+            showSuccess("Contato salvo com sucesso!");
+        }
+    } catch (error) {
+        console.error('Erro ao salvar contato:', error);
+        showError("Erro ao salvar contato");
+    }
+}
+
+async function deleteNovoCliente(id) {
+    showConfirm('Deletar Cliente', 'Tem certeza que deseja deletar este cliente?', async () => {
+        try {
+            await fetch(`${API_URL}/contatos/novo/${id}`, { method: 'DELETE' });
+            await loadNovosClientes();
+            showSuccess("Cliente deletado com sucesso!");
+        } catch (error) {
+            console.error('Erro ao deletar contato:', error);
+            showError("Erro ao deletar contato");
+        }
+    });
+}
+
+async function deleteContatoSalvo(id) {
+    showConfirm('Deletar Contato', 'Tem certeza que deseja deletar este contato?', async () => {
+        try {
+            await fetch(`${API_URL}/contatos/salvo/${id}`, { method: 'DELETE' });
+            await loadContatosSalvos();
+            showSuccess("Contato deletado com sucesso!");
+        } catch (error) {
+            console.error('Erro ao deletar contato:', error);
+            showError("Erro ao deletar contato");
+        }
+    });
+}
+    </script>
+</body>
+</html>

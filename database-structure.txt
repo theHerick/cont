@@ -1,0 +1,155 @@
+========================================
+ESTRUTURA DO BANCO DE DADOS - NEON
+Sistema Motorista Particular BC
+========================================
+
+DATABASE: motorista_particular_bc
+
+----------------------------------------
+TABELA: usuarios
+----------------------------------------
+Armazena os dados de login dos motoristas
+
+Campos:
+- id (SERIAL PRIMARY KEY)
+- username (VARCHAR(50) UNIQUE NOT NULL)
+- password (VARCHAR(255) NOT NULL) -- Hash da senha
+- nome_completo (VARCHAR(100))
+- email (VARCHAR(100))
+- telefone (VARCHAR(20))
+- data_criacao (TIMESTAMP DEFAULT CURRENT_TIMESTAMP)
+- ultimo_acesso (TIMESTAMP)
+
+----------------------------------------
+TABELA: contatos_novos
+----------------------------------------
+Armazena os novos contatos recebidos
+
+Campos:
+- id (SERIAL PRIMARY KEY)
+- nome (VARCHAR(100) NOT NULL)
+- email (VARCHAR(100) NOT NULL)
+- telefone (VARCHAR(20) NOT NULL)
+- mensagem (TEXT)
+- data_recebimento (TIMESTAMP DEFAULT CURRENT_TIMESTAMP)
+- usuario_id (INTEGER REFERENCES usuarios(id))
+
+----------------------------------------
+TABELA: contatos_salvos
+----------------------------------------
+Armazena os contatos que foram salvos pelo motorista
+
+Campos:
+- id (SERIAL PRIMARY KEY)
+- nome (VARCHAR(100) NOT NULL)
+- email (VARCHAR(100) NOT NULL)
+- telefone (VARCHAR(20) NOT NULL)
+- mensagem (TEXT)
+- data_original (TIMESTAMP) -- Data do contato original
+- data_salvo (TIMESTAMP DEFAULT CURRENT_TIMESTAMP)
+- usuario_id (INTEGER REFERENCES usuarios(id))
+- observacoes (TEXT) -- Campo para anotações adicionais
+
+----------------------------------------
+TABELA: historico_interacoes
+----------------------------------------
+Registra todas as interações com os contatos
+
+Campos:
+- id (SERIAL PRIMARY KEY)
+- contato_id (INTEGER) -- ID do contato
+- tipo_contato (VARCHAR(20)) -- 'novo' ou 'salvo'
+- tipo_interacao (VARCHAR(20)) -- 'whatsapp', 'email', 'salvo', 'deletado'
+- data_interacao (TIMESTAMP DEFAULT CURRENT_TIMESTAMP)
+- usuario_id (INTEGER REFERENCES usuarios(id))
+
+========================================
+SCRIPTS SQL PARA CRIAÇÃO DAS TABELAS
+========================================
+
+-- Criar tabela de usuários
+CREATE TABLE usuarios (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    nome_completo VARCHAR(100),
+    email VARCHAR(100),
+    telefone VARCHAR(20),
+    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    ultimo_acesso TIMESTAMP
+);
+
+-- Criar tabela de contatos novos
+CREATE TABLE contatos_novos (
+    id SERIAL PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    telefone VARCHAR(20) NOT NULL,
+    mensagem TEXT,
+    data_recebimento TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    usuario_id INTEGER REFERENCES usuarios(id)
+);
+
+-- Criar tabela de contatos salvos
+CREATE TABLE contatos_salvos (
+    id SERIAL PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    telefone VARCHAR(20) NOT NULL,
+    mensagem TEXT,
+    data_original TIMESTAMP,
+    data_salvo TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    usuario_id INTEGER REFERENCES usuarios(id),
+    observacoes TEXT
+);
+
+-- Criar tabela de histórico de interações
+CREATE TABLE historico_interacoes (
+    id SERIAL PRIMARY KEY,
+    contato_id INTEGER,
+    tipo_contato VARCHAR(20),
+    tipo_interacao VARCHAR(20),
+    data_interacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    usuario_id INTEGER REFERENCES usuarios(id)
+);
+
+-- Criar índices para melhor performance
+CREATE INDEX idx_contatos_novos_usuario ON contatos_novos(usuario_id);
+CREATE INDEX idx_contatos_salvos_usuario ON contatos_salvos(usuario_id);
+CREATE INDEX idx_historico_usuario ON historico_interacoes(usuario_id);
+CREATE INDEX idx_historico_data ON historico_interacoes(data_interacao);
+
+-- Inserir usuário padrão (senha: 456 hasheada)
+-- Nota: Em produção, usar bcrypt ou similar para hash de senha
+INSERT INTO usuarios (username, password, nome_completo) 
+VALUES ('123', '456', 'Motorista BC');
+
+========================================
+PRÓXIMOS PASSOS
+========================================
+
+1. Criar conta no Neon (https://neon.tech)
+2. Criar novo projeto PostgreSQL
+3. Executar os scripts SQL acima
+4. Obter a connection string do Neon
+5. Criar API backend (Node.js/Express ou Python/Flask)
+6. Integrar frontend com a API
+
+========================================
+ARQUITETURA DO SISTEMA
+========================================
+
+Frontend (index.html)
+    ↓
+API Backend (Node.js/Express ou Python/Flask)
+    ↓
+Neon PostgreSQL Database
+
+Endpoints necessários da API:
+- POST /api/login - Autenticação
+- GET /api/contatos/novos - Listar contatos novos
+- GET /api/contatos/salvos - Listar contatos salvos
+- POST /api/contatos/novo - Adicionar novo contato
+- POST /api/contatos/salvar/:id - Salvar contato
+- DELETE /api/contatos/:tipo/:id - Deletar contato
+- POST /api/interacao - Registrar interação
